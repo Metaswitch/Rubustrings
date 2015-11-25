@@ -30,11 +30,11 @@ def validate_format(line)
 end
 
 def validate_special_characters(translation_key, translation_value)
-  variables_regex = /%[hlqLztj]?[@%dDuUxXoOfeEgGcCsSpaAF]/
+  variables_regex = /%([1-9][0-9]?\$)?[hlqLztj]?[@%dDuUxXoOfeEgGcCsSpaAF]/
   key_variables = translation_key.scan(variables_regex) 
   value_variables = translation_value.scan(variables_regex) 
 
-  return key_variables.sort == value_variables.sort
+  return key_variables.sort == value_variables.sort, key_variables.count == value_variables.count
 end
 
 def validate_special_beginning(translation_key, translation_value)
@@ -63,8 +63,9 @@ def validate_translation_line(line)
 
   print "⊗ Warning, translation significantly large: #{line}".yellow unless check_translation_length match[1], match[2]
 
-  validation_special_characters = validate_special_characters match[1],match[2]
-  print "✘ Error, number of variables mismatch: #{line}".red unless validation_special_characters
+  variables_exact, variables_count = validate_special_characters match[1],match[2]
+  print "⊗ Warning, variables mismatch: #{line}".yellow unless variables_exact
+  print "⊗ Warning, number of variables mismatch: #{line}".yellow unless variables_count
 
   validation_special_beginning = validate_special_beginning match[1],match[2]
   print "✘ Error, beginning mismatch: #{line}".red unless validation_special_beginning
@@ -72,7 +73,7 @@ def validate_translation_line(line)
   validation_special_ending = validate_special_ending match[1],match[2]
   print "✘ Error, ending mismatch: #{line}".red unless validation_special_ending
 
-  return validation_special_characters && validation_special_beginning && validation_special_ending
+  return validation_special_beginning && validation_special_ending
 end
 
 def validate_localizable_string_file (file_name)
