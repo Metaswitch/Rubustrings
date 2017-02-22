@@ -1,4 +1,4 @@
-# Rubustrings
+# Rubustrings [![Build Status](https://travis-ci.org/dcordero/Rubustrings.svg?branch=master)](https://travis-ci.org/dcordero/Rubustrings)
 
 Check the format and consistency of the Localizable.strings files of iOS Apps with multi-language support
 
@@ -42,6 +42,14 @@ dcordero@silver:~$ ./rubustrings Localizable.strings
 Processing file: "Localizable.strings"
 ✓ Strings file validated succesfully
 ```
+## XCode
+
+Rubustrings can also be used as a custom build rule so that all .strings files
+are automatically validated at build time. This will also attempt to highlight 
+offending lines in XCode. See validate_strings_xcode.sh for instructions on how
+to set this up.
+
+![Xcode build rule example](./xcode_example.png "example")
 
 ## License
 
